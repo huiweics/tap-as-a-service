@@ -208,10 +208,7 @@ class OvsTaasDriver(taas_base.TaasAgentDriver):
         # Get OVS port id for tap service port
         ovs_port = self.int_br.get_vif_port_by_id(port['id'])
         ovs_port_id = ovs_port.ofport
-
-        # Get VLAN id for tap service port
-        port_dict = self.int_br.get_port_tag_dict()
-        port_vlan_id = port_dict[ovs_port.port_name]
+        port_mac = ovs_port.vif_mac
 
         # Get patch port IDs
         patch_int_tap_id = self.int_br.get_port_ofport('patch-int-tap')
@@ -222,8 +219,8 @@ class OvsTaasDriver(taas_base.TaasAgentDriver):
                              priority=25,
                              in_port=patch_int_tap_id,
                              dl_vlan=taas_id,
-                             actions="mod_vlan_vid:%s,output:%s" %
-                             (str(port_vlan_id), str(ovs_port_id)))
+                             actions="pop_vlan,mod_dl_dst:%s,output:%s" %
+                             (port_mac, str(ovs_port_id)))
 
         # Add flow(s) in br-tap
         self.tap_br.add_flow(table=taas_ovs_consts.TAAS_RECV_LOC,
