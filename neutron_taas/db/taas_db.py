@@ -20,8 +20,9 @@ from sqlalchemy.orm import exc
 
 from neutron.db import common_db_mixin as base_db
 from neutron import manager
-from neutron_lib import constants
-from neutron_lib.db import model_base
+from neutron.plugins.common import constants
+from neutron.db import model_base
+from neutron.db import model_v2
 from neutron_taas.extensions import taas
 from oslo_log import log as logging
 from oslo_utils import uuidutils
@@ -31,7 +32,7 @@ LOG = logging.getLogger(__name__)
 
 
 class TapService(model_base.BASEV2, model_base.HasId,
-                 model_base.HasProjectNoIndex):
+                 model_base.HasTenant):
 
     # Represents a V2 TapService Object
     __tablename__ = 'tap_services'
@@ -43,7 +44,7 @@ class TapService(model_base.BASEV2, model_base.HasId,
 
 
 class TapFlow(model_base.BASEV2, model_base.HasId,
-              model_base.HasProjectNoIndex):
+              model_base.HasTenant):
 
     # Represents a V2 TapFlow Object
     __tablename__ = 'tap_flows'

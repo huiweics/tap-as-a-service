@@ -33,7 +33,7 @@ def upgrade():
         sa.Column('name', sa.String(length=255), nullable=True),
         sa.Column('description', sa.String(length=1024), nullable=True),
         sa.Column('port_id', sa.String(36), nullable=False),
-        sa.Column('network_id', sa.String(36), nullable=True))
+        sa.Column('status', sa.String(16), nullable=False))
 
     op.create_table(
         'tap_flows',
@@ -46,9 +46,12 @@ def upgrade():
                   sa.ForeignKey("tap_services.id",
                                 ondelete="CASCADE"), nullable=False),
         sa.Column('source_port', sa.String(length=36), nullable=False),
-        sa.Column('direction', direction_types, nullable=False))
+        sa.Column('direction', direction_types, nullable=False),
+        sa.Column('status', sa.String(16), nullable=False))
 
     op.create_table(
         'tap_id_associations',
-        sa.Column('tap_service_id', sa.String(length=36)),
+        sa.Column('tap_service_id', sa.String(length=36),
+                  sa.ForeignKey("tap_services.id",
+                                ondelete="CASCADE"), nullable=False),
         sa.Column('taas_id', sa.INTEGER, primary_key=True, autoincrement=True))

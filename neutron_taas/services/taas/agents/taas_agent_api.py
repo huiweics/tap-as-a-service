@@ -24,7 +24,7 @@ LOG = logging.getLogger(__name__)
 TaasOpts = [
     cfg.StrOpt(
         'driver',
-        default='',
+        default='neutron_taas.services.taas.drivers.linux.ovs_taas.OvsTaasDriver',
         help=_("Name of the TaaS Driver")),
     cfg.BoolOpt(
         'enabled',
